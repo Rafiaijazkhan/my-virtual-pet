@@ -6,6 +6,9 @@ import PetCharacter from './components/PetCharacter';
 import PetStats from './components/PetStats';
 import ActionButtons from './components/ActionButtons';
 import FoodSelector from './components/FoodSelector';
+import Navigation from './components/Navigation';
+import LevelProgress from './components/LevelProgress';
+import MiniGames from './components/MiniGames';
 
 const ANIM = {
   eat: 'anim-eat',
@@ -14,8 +17,18 @@ const ANIM = {
   happy: 'anim-happy',
 };
 
+function ComingSoon({ title }) {
+  return (
+    <div className="coming-soon">
+      <h2>{title}</h2>
+      <p>Coming soon! 🚧</p>
+    </div>
+  );
+}
+
 function App() {
   const game = usePetGame();
+  const [view, setView] = useState('home');
   const [showFood, setShowFood] = useState(false);
   const [bubble, setBubble] = useState(null);
   const [anim, setAnim] = useState('');
@@ -36,54 +49,100 @@ function App() {
     return <AdoptionScreen onAdopt={game.adopt} />;
   }
 
-  const mood = getMood(game.pet);
+  const pet = game.pet;
+  const mood = getMood(pet);
   const speechText = bubble ? bubble.text : MOOD_TEXT[mood];
+  const showPet = view === 'home' || view === 'activities';
 
   return (
     <div className="temp-home">
       <div className="top-bar">
         <strong>
-          {game.pet.name} · Lv {game.pet.level}
+          {pet.name} · Lv {pet.level}
         </strong>
-        <strong>🪙 {game.pet.coins}</strong>
+        <strong>🪙 {pet.coins}</strong>
       </div>
 
-      <div className={`speech ${bubble && bubble.kind === 'error' ? 'speech-error' : ''}`}>
-        {speechText}
-      </div>
-
-      <div className="stage-wrap">
-        <PetCharacter pet={game.pet} mood={mood} action={anim} />
-        {anim === 'anim-love' && (
-          <div className="hearts">
-            <span>💖</span>
-            <span>💕</span>
-            <span>💗</span>
+      {showPet && (
+        <>
+          <div className={`speech ${bubble && bubble.kind === 'error' ? 'speech-error' : ''}`}>
+            {speechText}
           </div>
-        )}
-      </div>
 
-      <PetStats stats={game.pet.stats} />
+          <div
+            className={`stage-wrap ${view === 'home' ? 'tappable' : ''}`}
+            onClick={view === 'home' ? game.petPet : undefined}
+          >
+            <PetCharacter pet={pet} mood={mood} action={anim} />
+            {anim === 'anim-love' && (
+              <div className="hearts">
+                <span>💖</span>
+                <span>💕</span>
+                <span>💗</span>
+              </div>
+            )}
+          </div>
+        </>
+      )}
 
-      <ActionButtons
-        sleeping={game.pet.sleeping}
-        onFeed={() => setShowFood(true)}
-        onBath={game.bath}
-        onSleep={game.toggleSleep}
-        onPet={game.petPet}
-      />
+      {view === 'home' && (
+        <>
+          <p className="hint">Tap your pet to cuddle it 💕</p>
+          <LevelProgress level={pet.level} xp={pet.xp} />
+          <PetStats stats={pet.stats} />
+          <button className="btn btn-soft" onClick={game.release}>
+            Release pet (for testing)
+          </button>
+        </>
+      )}
+
+      {view === 'activities' && (
+        <>
+          <ActionButtons
+            sleeping={pet.sleeping}
+            onFeed={() => setShowFood(true)}
+            onBath={game.bath}
+            onSleep={game.toggleSleep}
+            onPet={game.petPet}
+          />
+          <div className="care-card">
+            <strong>Your care so far</strong>
+            <span>🍎 Fed: {pet.counters.fed} times</span>
+            <span>🛁 Baths: {pet.counters.baths}</span>
+            <span>🌙 Sleeps: {pet.counters.sleeps}</span>
+            <span>🤚 Cuddles: {pet.counters.pets}</span>
+          </div>
+        </>
+      )}
+
+      {view === 'games' && <MiniGames pet={pet} onReward={game.rewardGame} />}
+      {view === 'shop' && <ComingSoon title="Shop 🛍️" />}
+      {view === 'journal' && <ComingSoon title="Journal 📖" />}
 
       {showFood && (
         <FoodSelector
-          coins={game.pet.coins}
+          coins={pet.coins}
           onPick={game.feed}
           onClose={() => setShowFood(false)}
         />
       )}
 
-      <button className="btn btn-soft" onClick={game.release}>
-        Release pet (for testing)
-      </button>
+      {game.levelUpTo && (
+        <div className="modal-back" onClick={game.dismissLevelUp}>
+          <div className="modal levelup" onClick={(e) => e.stopPropagation()}>
+            <div className="pet-big bounce">🎉</div>
+            <h2>Level up!</h2>
+            <p>
+              {pet.name} reached level {game.levelUpTo}! You got 🪙 20 bonus coins.
+            </p>
+            <button className="btn" onClick={game.dismissLevelUp}>
+              Yay!
+            </button>
+          </div>
+        </div>
+      )}
+
+      <Navigation view={view} onChange={setView} />
     </div>
   );
 }
