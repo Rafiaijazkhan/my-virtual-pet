@@ -674,4 +674,166 @@ h1, h2, h3 {
 @keyframes fall {
   from { transform: translateY(0); }
   to { transform: translateY(430px); }
+}  
+
+
+/* ---------- Guess the Mood ---------- */
+.mood-face {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 16px;
+  border-radius: 20px;
+  background: radial-gradient(circle, white, var(--pink));
+}
+
+.mood-pet {
+  font-size: 5rem;
+  line-height: 1;
+}
+
+.mood-big {
+  font-size: 4rem;
+  line-height: 1;
+  animation: pop 0.3s ease;
+}
+
+.mood-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+}
+
+.mood-option {
+  border: 3px solid var(--lavender);
+  background: white;
+  color: var(--lavender-dark);
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 12px 8px;
+  border-radius: 18px;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.mood-option:hover:not(:disabled) {
+  transform: translateY(-3px);
+  background: var(--cream);
+}
+
+.mood-option:disabled {
+  cursor: default;
+}
+
+.mood-option.right {
+  background: var(--mint);
+  border-color: #6fdba5;
+  color: #1f7a4d;
+}
+
+.mood-option.wrong {
+  background: #ffe3ea;
+  border-color: #ff7a8a;
+  color: #c2415f;
+}  
+
+/* ---------- Shop, journal, toast ---------- */
+.shop,
+.journal {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+  animation: pop 0.25s ease;
+}
+
+.shop-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.shop-tab {
+  border: none;
+  cursor: pointer;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: white;
+  color: var(--lavender-dark);
+  font-weight: bold;
+  text-transform: capitalize;
+  box-shadow: var(--shadow);
+}
+
+.shop-tab.active {
+  background: var(--pink-dark);
+  color: white;
+}
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.shop-item {
+  background: white;
+  border-radius: 20px;
+  padding: 14px 8px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.shop-item.locked {
+  opacity: 0.6;
+}
+
+.btn-small {
+  padding: 6px 16px;
+  font-size: 0.9rem;
+}
+
+.note {
+  border-radius: 20px;
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.note-pink { background: #ffe3ee; transform: rotate(-1deg); }
+.note-blue { background: #e0f0ff; transform: rotate(1deg); }
+.note-mint { background: #dcf8ea; transform: rotate(-0.5deg); }
+.note-lavender { background: #eee4fb; transform: rotate(0.8deg); }
+
+.toast {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-weight: bold;
+  box-shadow: var(--shadow);
+  z-index: 60;
+  animation: pop 0.25s ease;
+}
+
+.toast-error {
+  background: #ffe3ea;
+  color: #c2415f;
 }

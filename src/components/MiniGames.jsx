@@ -1,11 +1,16 @@
 import { useState } from 'react';
 import CatchTreat from './CatchTreat';
+import GuessMood from './GuessMood';
 
 export default function MiniGames({ pet, onReward }) {
   const [game, setGame] = useState(null);
 
   if (game === 'treats') {
     return <CatchTreat onFinish={onReward} onExit={() => setGame(null)} />;
+  }
+
+  if (game === 'mood') {
+    return <GuessMood pet={pet} onFinish={onReward} onExit={() => setGame(null)} />;
   }
 
   const blocked = pet.sleeping
@@ -35,10 +40,10 @@ export default function MiniGames({ pet, onReward }) {
         <span className="game-emoji">🎭</span>
         <div>
           <strong>Guess the Mood</strong>
-          <small>Coming soon</small>
+          <small>Pick the right expression</small>
         </div>
-        <button className="btn" disabled>
-          Soon
+        <button className="btn" disabled={Boolean(blocked)} onClick={() => setGame('mood')}>
+          Play
         </button>
       </div>
     </div>

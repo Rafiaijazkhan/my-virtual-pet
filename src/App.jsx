@@ -9,6 +9,8 @@ import FoodSelector from './components/FoodSelector';
 import Navigation from './components/Navigation';
 import LevelProgress from './components/LevelProgress';
 import MiniGames from './components/MiniGames';
+import Shop from './components/Shop';
+import Journal from './components/Journal';
 
 const ANIM = {
   eat: 'anim-eat',
@@ -16,15 +18,6 @@ const ANIM = {
   love: 'anim-love',
   happy: 'anim-happy',
 };
-
-function ComingSoon({ title }) {
-  return (
-    <div className="coming-soon">
-      <h2>{title}</h2>
-      <p>Coming soon! 🚧</p>
-    </div>
-  );
-}
 
 function App() {
   const game = usePetGame();
@@ -116,8 +109,14 @@ function App() {
       )}
 
       {view === 'games' && <MiniGames pet={pet} onReward={game.rewardGame} />}
-      {view === 'shop' && <ComingSoon title="Shop 🛍️" />}
-      {view === 'journal' && <ComingSoon title="Journal 📖" />}
+      {view === 'shop' && <Shop pet={pet} onBuy={game.buy} onEquip={game.equip} />}
+      {view === 'journal' && <Journal pet={pet} />}
+
+      {!showPet && bubble && (
+        <div className={`toast ${bubble.kind === 'error' ? 'toast-error' : ''}`}>
+          {bubble.text}
+        </div>
+      )}
 
       {showFood && (
         <FoodSelector
