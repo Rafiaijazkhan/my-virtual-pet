@@ -108,7 +108,9 @@ function App() {
         </>
       )}
 
-      {view === 'games' && <MiniGames pet={pet} onReward={game.rewardGame} />}
+            {view === 'games' && (
+        <MiniGames pet={pet} onReward={game.rewardGame} onWake={game.toggleSleep} />
+      )}
       {view === 'shop' && <Shop pet={pet} onBuy={game.buy} onEquip={game.equip} />}
       {view === 'journal' && <Journal pet={pet} />}
 
